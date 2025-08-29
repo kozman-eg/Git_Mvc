@@ -1,0 +1,29 @@
+<?php
+
+
+if (php_sapi_name() !== 'cli') {
+
+    die("this tool is only for use the command line");
+}
+$DS =  DIRECTORY_SEPARATOR;
+define('CPATH', __DIR__ . $DS);
+define('ROOTPATH', __DIR__ . $DS);
+
+$action = $argv[1] ?? 'help';
+require 'app' . $DS . 'thunder' . $DS . 'init.php';
+
+$thunder = new \Thunder\Thunder;
+
+
+if (!empty($action)) {
+
+    $parts = explode(":", $action);
+
+    $method = $parts[0];
+
+    if (is_callable([$thunder, $method])) {
+        call_user_func_array([$thunder, $method], [$argv]);
+    } else {
+        echo "\n\rThat command was not recognised. Plasse tupe 'php thunder help' to see all commands\n\r";
+    }
+}
