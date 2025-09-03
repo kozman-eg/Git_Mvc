@@ -1,15 +1,17 @@
 <?php
 
 namespace Thunder;
-// C:\xampp\htdocs\MVC
+// http://localhost/MVC/Git_Mvc/public/login
+// C:\xampp\htdocs\MVC\Git_Mvc
 defined('CPATH') or exit('access allwoed');
 
 class Thunder
 {
-    private $version = '1.0.0';
-    public function db()
-    {
 
+    private $version = '1.0.0';
+    public function db($argv)
+    {
+        $db = new Database;
         $word = new \Core\Inflector;
 
         $mode = $argv[1] ?? null;
@@ -37,42 +39,72 @@ class Thunder
                     die("\n\rPlaease provide a database name\r\n");
                 }
 
-                if (file_put_contents($filename, $content)) {
-                    die("\n\rController $param1 created successfully!\r\n");
-                } else {
-                    die("\n\rFailed to create Controller due to an error\r\n");
+                $query = "CREATE DATABASE IF NOT EXISTS " . $param1;
+                $db->query($query);
+                die("\n\Database  $param1 created successfully!\r\n");
+
+                break;
+
+            case "table":
+                if (!$param1) {
+                    echo "Please provide a table name.\n";
+                    return;
+                }
+
+                $param1 = $word->pluralize(strtolower($param1));
+                $query = "DESCRIBE " . $param1;
+
+
+                $rows = $db->query($query);
+
+                if (!$rows) {
+                    echo "No table found with name: $param1\n";
+                    return;
+                }
+                print_r($rows['data']);
+                try {
+                    if ($rows && !empty($rows['data'])) {
+                        // تنسيقات الطباعة
+                        echo "\n+-----------------+-----------------+------+-----+---------+----------------+\n";
+                        echo   "| Field           | Type            | Null | Key | Default | Extra          |\n";
+                        echo   "+-----------------+-----------------+------+-----+---------+----------------+\n";
+
+                        foreach ($rows['data'] as $row) {
+                            printf(
+                                "| %-15s | %-15s | %-4s | %-3s | %-7s | %-14s |\n",
+                                $row->Field,
+                                $row->Type,
+                                $row->Null,
+                                $row->Key,
+                                $row->Default ?? NULL,
+                                $row->Extra
+                            );
+                        }
+
+                        echo "+-----------------+-----------------+------+-----+---------+----------------+\n\n";
+                    } else {
+                        die("\n\rthis $param1 exist but her empty" . PHP_EOL . "\r\n");
+                    }
+                } catch (\PDOException $e) {
+                    die("\n\rthis $param1 not exist" . PHP_EOL . "\r\n");
                 }
                 break;
-            case 'table':
 
-                $filename = __DIR__ . $DS . ".." . $DS . "model" . $DS . $param1 . ".php";
-
-                if (empty($param1)) {
-                    die("\n\rPlaease provide a model name\r\n");
-                }
-                if (file_exists($filename)) {
-                    die("\n\rThat model already exists\r\n");
-                }
-
-                $template = file_get_contents(__DIR__ . $DS . 'samples' . $DS . 'model-sample.php');
-
-                $content = str_replace("{CLASSNAME}", $param1, $template);
-                // onlu as 's' at the and of table name if it doesnt exits
-
-                $content = str_replace("{table}", strtolower($word->pluralize($param1)), $content);
-
-                if (file_put_contents(__DIR__ . $DS . ".." . $DS . "models" . $DS . "{$param1}.php", $content)) {
-                    die("\n\model $param1 created successfully!\r\n");
-                } else {
-                    die("\n\rFailed to create Controller due to an error\r\n");
-                }
-                break;
             case 'seed':
                 break;
             case 'drop':
+
+                if (empty($param1)) {
+                    die("\n\rPlaease provide a database name\r\n");
+                }
+
+                $query = "drop database " . $param1;
+                $db->query($query);
+                die("\n\drop Database  $param1 successfully!\r\n");
+
                 break;
             default:
-                die("\n\rUndnown 'make; commend \n\r");
+                die("\n\rUndnown commend $argv[1] \n\r");
                 break;
         }
     }
@@ -166,7 +198,7 @@ class Thunder
             case 'tollback':
                 break;
             default:
-                die("\n\rUndnown 'make; commend \n\r");
+                die("\n\rUndnown commend $argv[1] \n\r");
                 break;
         }
     }

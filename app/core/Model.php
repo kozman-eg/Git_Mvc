@@ -157,9 +157,17 @@ trait Model
     {
         $this->errors = [];
 
-        if (!empty($this->validationRules)) {
+        if (!empty($this->primaryKey) && !empty($data[$this->primaryKey])) {
 
-            foreach ($this->validationRules as $column => $rules) {
+            $validationRules = $this->onUpdateValidationRules;
+        }else{
+
+            $validationRules = $this->onInsertValidationRules;
+        }
+
+        if (!empty($validationRules)) {
+
+            foreach ($validationRules as $column => $rules) {
                 $value = trim($data[$column] ?? '');
 
                 foreach ($rules as $rule) {

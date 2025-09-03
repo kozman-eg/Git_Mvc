@@ -30,24 +30,25 @@ trait Database
     {
         $con = $this->connect();
         $stm = $con->prepare($query);
-        $check = $stm->execute($data);
+        $success = $stm->execute($data);
 
-        if ($check) {
+        $isSelect = stripos(trim($query), 'SELECT') === 0 
+                    || stripos(trim($query), 'DESCRIBE') === 0
+                    || stripos(trim($query), 'SHOW') === 0;
 
-            if (stripos(trim($query), 'SELECT') === 0) {
-                $result = $stm->fetchAll(PDO::FETCH_OBJ);
-                return [
-                    'data' => $result,
-                    'count' => $stm->rowCount()
-                ];
-            } else {
-                // استعلام تعديل أو حذف أو إدراج
-                return [
-                    'success' => true,
-                    'count' => $stm->rowCount()
-                ];
-            }
+        if ($isSelect) {
+            $result = $stm->fetchAll(PDO::FETCH_OBJ);
+            return [
+                'success' => $success,
+                'data'    => $result,
+                'count'   => $stm->rowCount()
+            ];
+        } else {
+            return [
+                'success' => $success,
+                'data'    => [], 
+                'count'   => $stm->rowCount()
+            ];
         }
-        return false;
     }
 }

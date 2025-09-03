@@ -9,6 +9,7 @@ class User
 {
 
     use \Core\Model;
+    public $primaryKey = 'UserID';
     protected $table = "users";
     protected $allowedcolumns = [
 
@@ -36,7 +37,38 @@ class User
     * unique
     * same_password
     */
-    protected $validationRules = [
+    protected $onInsertValidationRules = [
+        'UserName' => [
+            'required',
+            'alpha',
+            'unique',
+        ],
+        'Password' => [
+            'required',
+            'longer_than_8_chars',
+            'alpha_numeric_symbol',
+            'strong_password',
+            'same_password',
+        ],
+        'again_password' => [
+            'required',
+            'strong_password',
+            'alpha_numeric_symbol',
+            'longer_than_8_chars',
+            'same_password',
+
+        ],
+        'FullName' => [
+            'required',
+            'alpha_space',
+        ],
+        'Email' => [
+            'required',
+            'email',
+            'unique',
+        ],
+    ];
+    protected $onUpdateValidationRules = [
         'UserName' => [
             'required',
             'alpha',
