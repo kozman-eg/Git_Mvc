@@ -37,10 +37,6 @@ use \Models\Request;
                 <div class="text-danger"><?= $errors['again_password'] ?? ''  ?></div>
             </div>
             <div class="form-floating">
-                <input name="FullName" type="text" class="form-control" id="floatingfullname" placeholder="FullName" value="<?= Request::old_value('FullName') ?>"> <label for="floatingfullname"><?php echo lang('fullname') ?></label>
-                <div class="text-danger"><?= $errors['FullName'] ?? ''  ?></div>
-            </div>
-            <div class="form-floating">
                 <input name="Email" type="email" class="form-control" id="floatingemail" placeholder="name@example.com" value="<?= Request::old_value('Email') ?>"> <label for="floatingemail"><?php echo lang('email') ?></label>
                 <div class="text-danger"><?= $errors['Email'] ?? ''  ?></div>
             </div>

@@ -148,9 +148,9 @@
             <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
 
             <div class="form-floating">
-                <input name="UserName" type="text" class="form-control" id="floatingInput" placeholder="name@example.com">
-                <label for="floatingInput">UserName</label>
-                <div class="text-danger"><?= $errors['UserName'] ?? '' ?></div>
+                <input name="Email" type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+                <label for="floatingInput">Email</label>
+                <div class="text-danger"><?= $errors['Email'] ?? '' ?></div>
 
             </div>
 

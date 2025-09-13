@@ -12,7 +12,7 @@ class Home
     use \Models\Pager;
 
 
-    public $userkey = 'UserName';
+    public $userkey = 'Name';
 
 
     public function index($a = '', $b = '', $c = '')
@@ -21,7 +21,8 @@ class Home
         if (!$ses->is_logged_in()) {
             return redirect('login');
         }
-        $date['UserName'] = empty($_SESSION['User']['UserName']) ? 'User' : $_SESSION['User']['UserName'];
+        $date['Name'] = empty($_SESSION['User']['Name']) ? 'User' : $_SESSION['User']['Name'];
+       
         $this->view('home', $date);
     }
     public function edit($a = '', $b = '', $c = '',)

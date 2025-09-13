@@ -214,7 +214,7 @@ echo ' view home page';
             </div>
         </header>
         <main class="px-3">
-            <h1><?= "Hi " . $UserName; ?></h1>
+            <h1><?= "Hi " . $Name; ?></h1>
             <h1>Cover your page.</h1>
             <p class="lead">
                 Cover is a one-page template for building simple and beautiful

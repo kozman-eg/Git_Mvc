@@ -8,21 +8,25 @@ class {CLASSNAME}
 {
     use \Core\Model;
 
-
     protected $table = '{table}';
-    protected $primaryKey  = 'ID';
     protected $loginUniqueColumn = 'UserName';
-    protected $allowedColumns = [
+    use \Core\Model;
 
-        'UserName',
-        'Password',
+    public function __construct()
+    {
+        // هنا تقدر تغير الـ primaryKey
+        $this->getPrimaryKey('ID');
+    }
+    // الأعمدة المسموح إدخالها
+    protected $allowedColumns = [
+        'Name',
         'Email',
-        'FullName',
-        'GroupID',
-        'TrustStatus',
-        'RegStatus',
-        'Date',
+        'Password',
+        'Role',
     ];
+
+    /* ***********************************
+    * قواعد التحقق (Validation rules)
     /* ***********************************
     * rules include:
     * required
@@ -38,10 +42,15 @@ class {CLASSNAME}
     * unique
     * same_password
     */
-    protected $validationRules = [
-        'UserName' => [
+
+    protected $onInsertValidationRules = [
+        'Name' => [
             'required',
-            'alpha',
+            'alpha_space',
+        ],
+        'Email' => [
+            'required',
+            'email',
             'unique',
         ],
         'Password' => [
@@ -53,13 +62,12 @@ class {CLASSNAME}
         ],
         'again_password' => [
             'required',
-            'strong_password',
-            'alpha_numeric_symbol',
-            'longer_than_8_chars',
             'same_password',
-
         ],
-        'FullName' => [
+    ];
+
+    protected $onUpdateValidationRules = [
+        'Name' => [
             'required',
             'alpha_space',
         ],

@@ -8,7 +8,7 @@ defined('ROOTPATH') or exit('Access not allowed');
 class Image
 {
     use \Core\Model;
-    protected $table = 'images';
+    protected $table = 'product_images';
 
 
 
@@ -87,23 +87,23 @@ class Image
     // جلب كل الصور
     public function getAll()
     {
-        $query = "SELECT * FROM $this->table ORDER BY id DESC";
+        $query = "SELECT * FROM $this->table ORDER BY ID DESC";
         return $this->query($query);
     }
 
     // جلب صورة بواسطة ID
     public function getById($id)
     {
-        $query = "SELECT * FROM $this->table WHERE id = :id";
-        return $this->query($query, ['id' => $id]);
+        $query = "SELECT * FROM $this->table WHERE ID = :id";
+        return $this->query($query, ['ID' => $id]);
     }
 
 
     // حذف صورة
     public function delete($id)
     {
-        $query = "DELETE FROM $this->table WHERE id = :id";
-        return $this->query($query, ['id' => $id]);
+        $query = "DELETE FROM $this->table WHERE ID = :id";
+        return $this->query($query, ['ID' => $id]);
     }
     // إضافة صورة
     /*

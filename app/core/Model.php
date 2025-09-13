@@ -13,17 +13,19 @@ trait Model
     protected $limit = 10;
     protected $offset = 0;
     protected $order_type = "DESC";
-    protected $order_column = "id";
-    protected $primaryKey = "id";
+    protected $order_column = "ID";
+    protected $primaryKey = "ID";
     public $errors = [];
 
-    public function getPrimaryKey()
+    public function getPrimaryKey($primaryKey = null)
     {
-        if (empty($this->primaryKey)) {
-            $this->primaryKey = 'id';
+        if (!empty($primaryKey)) {
+            $this->primaryKey = $primaryKey;
         }
+
         return $this->primaryKey;
     }
+
     public function getErrors($key)
     {
         if (!empty($this->errors[$key])) {
@@ -86,7 +88,7 @@ trait Model
         return $this->query($query, $data);
     }
 
-    public function update($data, $id, $id_column = 'id')
+    public function update($data, $id, $id_column = 'ID')
     {
         if (!empty($this->allowedcolumns)) {
             foreach ($data as $key => $value) {
@@ -111,7 +113,7 @@ trait Model
         return $this->query($query, $data);
     }
 
-    public function delete($id, $id_column = 'id')
+    public function delete($id, $id_column = 'ID')
     {
         $data[$id_column] = $id;
         $query = "DELETE FROM $this->table WHERE $id_column = :$id_column";

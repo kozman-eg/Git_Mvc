@@ -239,3 +239,15 @@ function URL($key): mixed
             break;
     }
 }
+function downloadImage($url, $path) {
+    $ch = curl_init($url);
+    $fp = fopen($path, 'wb');
+    curl_setopt($ch, CURLOPT_FILE, $fp);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 20);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+    curl_exec($ch);
+    $error = curl_error($ch);
+    curl_close($ch);
+    fclose($fp);
+    return $error === '';
+}
